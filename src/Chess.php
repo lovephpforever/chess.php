@@ -152,7 +152,7 @@ class Chess
         'p',
         'n',
         'k',
-    ]
+    ];
 
     const ROOKS = [
         self::WHITE => [['square' => self::SQUARES['a1'], 'flag' => self::BITS['QSIDE_CASTLE']],
