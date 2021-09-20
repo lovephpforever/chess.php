@@ -895,7 +895,7 @@ class Chess
                                     if ($piece['type'] === self::PAWN && $square === $this->epSquare) {
                                         $push($square, $attacking, self::BITS['EP_CAPTURE'], $legal);
                                     }
-                                    if ($target[0] !== $this->turn) {
+                                    if ($target['color'] !== $this->turn) {
                                         $push($square, $attacking, self::BITS['CAPTURE'], $legal);
                                     }
                                     break;
