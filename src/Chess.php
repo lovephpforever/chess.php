@@ -878,7 +878,7 @@ class Chess
                 if ($piece = $this->board[$square]) {
                     if ($piece['color'] === $this->turn) {
                         foreach (self::PIECE_OFFSETS[$piece['type']] as $offset) {
-                            $attacking = $square
+                            $attacking = $square;
                             while (true) {
                                 $attacking += $offset;
                                 if ($attacking & 0x88) {
