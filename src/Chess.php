@@ -862,7 +862,7 @@ class Chess
      *
      * @return iterable Returns the generator object.
      */
-    protected function generateMoves(array $options = []): Generator
+    protected function generateMoves(array $options = [])
     {
         $legal = isset($options['legal']) ? $options['legal'] : true;
         $push = function ($from, $to, $bits, $legal) {
