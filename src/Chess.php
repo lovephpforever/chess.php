@@ -29,6 +29,7 @@ declare(strict_types=1);
 
 namespace Ryanhs\Chess;
 
+use Generator;
 use Ryanhs\Chess\Fen\Validator;
 
 class Chess
@@ -861,7 +862,7 @@ class Chess
      *
      * @return iterable Returns the generator object.
      */
-    protected function generateMoves(array $options = []): iterable
+    protected function generateMoves(array $options = []): Generator
     {
         $legal = isset($options['legal']) ? $options['legal'] : true;
         $push = function ($from, $to, $bits, $legal) {
