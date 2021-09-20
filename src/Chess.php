@@ -873,38 +873,42 @@ class Chess
                        self::WHITE => self::RANK_2];
         for ($square = 0; $square <= 119; ++$square) {
             if ($square & 0x88) {
-                $square += 7;
-            } elseif ($piece = $this->board[$square]) {
-                if ($piece['color'] === $this->turn) {
-                    foreach (self::PIECE_OFFSETS[$piece['type']] as $offset) {
-                        for ($attacking = $square + $offset;
-                             $attacking & 0x88;
-                             $attacking += $offset) {
-                            if ($target = $this->board[$attacking]) {
-                                if ($piece['type'] === self::PAWN && $square === $this->epSquare) {
-                                    $push($square, $attacking, self::BITS['EP_CAPTURE'], $legal);
+                $square += 8;
+            } else {
+                if ($piece = $this->board[$square]) {
+                    if ($piece['color'] === $this->turn) {
+                        foreach (self::PIECE_OFFSETS[$piece['type']] as $offset) {
+                            for ($attacking = $square + $offset;
+                                 $attacking & 0x88;
+                                 $attacking += $offset) {
+                                $target = $this->board[$attacking]
+                                if (!is_null($target)) {
+                                    if ($piece['type'] === self::PAWN && $square === $this->epSquare) {
+                                        $push($square, $attacking, self::BITS['EP_CAPTURE'], $legal);
+                                    }
+                                    if ($target[0] !== $this->turn) {
+                                        $push($square, $attacking, self::BITS['CAPTURE'], $legal);
+                                    }
+                                    break;
+                                } elseif ($piece['type'] === self::PAWN) {
+                                    if (in_array($offset, [16, -16])) {
+                                        $push($square, $attacking, self::BITS['NORMAL'], $legal);
+                                    }
+                                    if (in_array($offset, [32, -32]) &&
+                                        !$this->board[$attacking - self::PIECE_OFFSETS[$piece['type']][0]] &&
+                                        $secondRank[$this->turn] === $square >> 4) {
+                                        $push($square, $attacking, self::BITS['BIG_PAWN'], $legal);
+                                    }
                                 }
-                                if ($target[0] !== $this->turn) {
-                                    $push($square, $attacking, self::BITS['CAPTURE'], $legal);
+                                $push($square, $attacking, self::BITS['NORMAL'], $legal);
+                                if (in_array($piece['type'], self::CRAWLERS)) {
+                                    break;
                                 }
-                                break;
-                            } elseif ($piece['type'] === self::PAWN) {
-                                if (in_array($offset, [16, -16])) {
-                                    $push($square, $attacking, self::BITS['NORMAL'], $legal);
-                                }
-                                if (in_array($offset, [32, -32]) &&
-                                    !$this->board[$attacking - self::PIECE_OFFSETS[$piece['type']][0]] &&
-                                    $secondRank[$this->turn] === $square >> 4) {
-                                    $push($square, $attacking, self::BITS['BIG_PAWN'], $legal);
-                                }
-                            }
-                            $push($square, $attacking, self::BITS['NORMAL'], $legal);
-                            if (in_array($piece['type'], self::CRAWLERS)) {
-                                break;
                             }
                         }
                     }
                 }
+                $square += 1;
             }
         }
         $them = self::swapColor($this->turn);
