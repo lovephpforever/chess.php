@@ -57,6 +57,7 @@ class Chess
     ];
 
     const PIECE_OFFSETS = [
+        self::PAWN => [-16,  -32,  -17,  -15],
         self::KNIGHT => [-18, -33, -31, -14,  18,  33,  31,  14],
         self::BISHOP => [-17, -15,  17,  15],
         self::ROOK => [-16,   1,  16,  -1],
@@ -899,6 +900,9 @@ class Chess
                                     }
                                     break;
                                 } elseif ($piece['type'] === self::PAWN) {
+                                    if ($piece['color'] == self::BLACK) {
+                                        $attacking = -$attacking;
+                                    }
                                     if (in_array($offset, [16, -16])) {
                                         $push($square, $attacking, self::BITS['NORMAL'], $legal);
                                     }
